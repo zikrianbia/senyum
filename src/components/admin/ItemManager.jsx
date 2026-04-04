@@ -137,7 +137,17 @@ export default function ItemManager() {
                       <span className="badge badge-category">{item.categories?.name || '—'}</span>
                     </td>
                     <td style={{ fontWeight: 600 }}>
-                      Rp {Number(item.price).toLocaleString('id-ID')}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        Rp {Number(item.price).toLocaleString('id-ID')}
+                        <button
+                          className="btn btn-ghost btn-icon"
+                          style={{ padding: '4px', opacity: 0.5 }}
+                          onClick={() => openEdit(item)}
+                          title="Ubah Harga"
+                        >
+                          <Pencil size={12} />
+                        </button>
+                      </div>
                     </td>
                     <td>
                       <div className="stock-control">
