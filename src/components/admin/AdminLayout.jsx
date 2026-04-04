@@ -1,14 +1,16 @@
+import { useState } from 'react'
 import { Routes, Route, NavLink, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import Dashboard from './Dashboard'
 import ItemManager from './ItemManager'
 import CategoryManager from './CategoryManager'
 import QRCodePage from './QRCodePage'
-import { LayoutDashboard, Package, Tag, QrCode, LogOut } from 'lucide-react'
+import { LayoutDashboard, Package, Tag, QrCode, LogOut, Menu, X } from 'lucide-react'
 
 export default function AdminLayout() {
   const { user, loading, signOut } = useAuth()
   const navigate = useNavigate()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   if (loading) {
     return (
@@ -27,9 +29,15 @@ export default function AdminLayout() {
     navigate('/admin/login')
   }
 
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
+  const closeSidebar = () => setIsSidebarOpen(false)
+
   return (
-    <div className="admin-layout">
-      <aside className="sidebar">
+    <div className={`admin-layout ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      {/* Mobile Overlay */}
+      {isSidebarOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
+
+      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <div className="sidebar-logo">
             <div className="logo-icon">😊</div>
@@ -38,22 +46,25 @@ export default function AdminLayout() {
               <span>Manajemen Stok</span>
             </div>
           </div>
+          <button className="sidebar-close-btn" onClick={closeSidebar}>
+            <X size={20} />
+          </button>
         </div>
 
         <nav className="sidebar-nav">
-          <NavLink to="/admin" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <NavLink to="/admin" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeSidebar}>
             <LayoutDashboard className="nav-icon" />
             Beranda
           </NavLink>
-          <NavLink to="/admin/items" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <NavLink to="/admin/items" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeSidebar}>
             <Package className="nav-icon" />
             Barang
           </NavLink>
-          <NavLink to="/admin/categories" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <NavLink to="/admin/categories" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeSidebar}>
             <Tag className="nav-icon" />
             Kategori
           </NavLink>
-          <NavLink to="/admin/qrcode" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <NavLink to="/admin/qrcode" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeSidebar}>
             <QrCode className="nav-icon" />
             Kode QR
           </NavLink>
@@ -68,6 +79,13 @@ export default function AdminLayout() {
       </aside>
 
       <div className="main-content">
+        <header className="mobile-header">
+          <button className="hamburger-btn" onClick={toggleSidebar}>
+            <Menu size={24} />
+          </button>
+          <div className="mobile-logo">😊 Senyum</div>
+        </header>
+
         <Routes>
           <Route index element={<Dashboard />} />
           <Route path="items" element={<ItemManager />} />
