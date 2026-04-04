@@ -61,34 +61,36 @@ export default function MenuPage() {
       </div>
 
       <div className="menu-container">
-        <div className="menu-search">
-          <Search className="search-icon" />
-          <input
-            type="text"
-            placeholder="Cari menu..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-        </div>
+        <div className="menu-header-sticky">
+          <div className="menu-search">
+            <Search className="search-icon" />
+            <input
+              type="text"
+              placeholder="Cari menu..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
 
-        <div className="menu-categories">
-          <button
-            className={`category-pill ${!activeCategory ? 'active' : ''}`}
-            onClick={() => setActiveCategory(null)}
-          >
-            <span className="pill-icon">🏪</span>
-            Semua
-          </button>
-          {categories.map(cat => (
+          <div className="menu-categories">
             <button
-              key={cat.id}
-              className={`category-pill ${activeCategory === cat.id ? 'active' : ''}`}
-              onClick={() => setActiveCategory(activeCategory === cat.id ? null : cat.id)}
+              className={`category-pill ${!activeCategory ? 'active' : ''}`}
+              onClick={() => setActiveCategory(null)}
             >
-              <span className="pill-icon">{cat.icon}</span>
-              {cat.name}
+              <span className="pill-icon">🏪</span>
+              Semua
             </button>
-          ))}
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                className={`category-pill ${activeCategory === cat.id ? 'active' : ''}`}
+                onClick={() => setActiveCategory(activeCategory === cat.id ? null : cat.id)}
+              >
+                <span className="pill-icon">{cat.icon}</span>
+                {cat.name}
+              </button>
+            ))}
+          </div>
         </div>
 
         {groupedItems.length === 0 ? (
