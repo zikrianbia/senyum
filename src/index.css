@@ -966,16 +966,20 @@ body {
 }
 
 .menu-header-sticky {
+  position: -webkit-sticky; /* Safari iOS fix */
   position: sticky;
   top: 0;
-  background: var(--menu-bg);
+  background: rgba(255, 250, 245, 0.97); /* Nearly opaque, matches --menu-bg */
   padding: 12px 16px;
+  margin-left: -16px;
+  margin-right: -16px;
+  padding-left: 16px;
+  padding-right: 16px;
   z-index: 50;
   margin-bottom: 20px;
-  width: 100%;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 1px 0 var(--menu-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .menu-search {
@@ -1823,7 +1827,7 @@ body {
     padding: 12px;
   }
 
-  .stats-grid {
+  .stats-grid, .category-grid {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -1832,15 +1836,35 @@ body {
     justify-content: center;
   }
 
-  .data-table-wrapper {
+  .table-container, .data-table-wrapper {
     overflow-x: auto;
+    width: 100%;
     -webkit-overflow-scrolling: touch;
   }
 }
 
 @media (max-width: 640px) {
-  .stats-grid {
+  .stats-grid, .category-grid {
     grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 12px;
+  }
+
+  .stat-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .stat-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .stat-info h3 {
+    font-size: 18px;
   }
 
   /* Table to Card conversion */
@@ -1860,54 +1884,41 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    margin-bottom: 16px;
-    padding: 16px;
+    margin-bottom: 12px;
+    padding: 12px;
     position: relative;
+    box-shadow: var(--shadow-sm);
   }
 
   .data-table td {
     border: none;
-    padding: 8px 0;
+    padding: 6px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: right;
+    font-size: 13px;
   }
 
   .data-table td:first-child {
     border-bottom: 1px solid var(--border);
-    padding-bottom: 12px;
-    margin-bottom: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 6px;
     display: block;
     text-align: left;
+    font-size: 15px;
+    font-weight: 700;
   }
 
-  /* Labels for the cards */
-  .data-table td:nth-child(2)::before {
-    content: 'Kategori';
-  }
-
-  .data-table td:nth-child(3)::before {
-    content: 'Harga';
-  }
-
-  .data-table td:nth-child(4)::before {
-    content: 'Stok';
-  }
-
-  .data-table td:nth-child(5)::before {
-    content: 'Status';
-  }
-
-  .data-table td:nth-child(6)::before {
-    content: 'Opsi';
-  }
-
+  /* Default Labels for the cards - can be overridden by specific tables */
   .data-table td::before {
+    content: attr(data-label);
     font-weight: 600;
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-muted);
     text-transform: uppercase;
+    flex-shrink: 0;
+    margin-right: 12px;
   }
 
   .data-table td:first-child::before {
@@ -1916,7 +1927,8 @@ body {
 
   .toolbar {
     flex-direction: column;
-    gap: 12px;
+    align-items: stretch;
+    gap: 8px;
   }
 
   .modal {
@@ -1932,7 +1944,146 @@ body {
     grid-template-columns: 1fr;
   }
 
+  /* --- MENU PUBLIC SHRUNK --- */
+  .menu-hero {
+    padding: 32px 16px 20px;
+  }
+
   .menu-hero h1 {
-    font-size: 28px;
+    font-size: 26px;
+  }
+
+  .menu-hero p {
+    font-size: 13px;
+  }
+
+  .menu-search input {
+    padding: 10px 16px 10px 42px;
+    font-size: 14px;
+  }
+
+  .menu-search .search-icon {
+    width: 16px;
+    height: 16px;
+    left: 14px;
+  }
+
+  .category-pill {
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+
+  .menu-section-title {
+    padding: 12px 4px 8px;
+    margin-bottom: 8px;
+  }
+
+  .menu-section-title h2 {
+    font-size: 16px;
+  }
+
+  .menu-section-title .section-icon {
+    font-size: 18px;
+  }
+
+  .menu-item-card {
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .item-image {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .item-name {
+    font-size: 14px;
+  }
+
+  .item-price {
+    font-size: 14px;
+  }
+
+  .item-add-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .item-qty-btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .floating-cart-btn {
+    padding: 10px 18px;
+    bottom: 16px;
+    font-size: 14px;
+    gap: 8px;
+  }
+
+  .floating-cart-info .floating-cart-price {
+    font-size: 14px;
+  }
+
+  .cart-drawer-header {
+    padding: 16px 20px 12px;
+  }
+
+  .cart-drawer-title h3 {
+    font-size: 16px;
+  }
+
+  .cart-item {
+    padding: 12px 20px;
+  }
+
+  .cart-item-name {
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  .cart-item-price {
+    font-size: 13px;
+  }
+
+  .cart-qty-count {
+    font-size: 14px;
+    min-width: 20px;
+  }
+
+  .cart-wa-btn {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .menu-header-sticky {
+    padding: 8px 16px;
+    margin-bottom: 12px;
+  }
+
+  .menu-search {
+    margin-bottom: 8px;
+  }
+
+  .menu-container {
+    padding: 0 12px 30px;
+    margin-top: -16px;
+  }
+
+  .menu-item-card {
+    gap: 10px;
+  }
+
+  .mobile-logo {
+    font-size: 16px;
+  }
+
+  .mobile-header {
+    padding: 8px 12px;
+  }
+
+  .hamburger-btn {
+    padding: 6px;
   }
 }

@@ -102,8 +102,8 @@ export default function Dashboard() {
                             <span>{item.name}</span>
                           </div>
                         </td>
-                        <td><span className="badge badge-category">{item.categories?.name}</span></td>
-                        <td><span className="badge badge-warning">{item.stock_quantity} tersisa</span></td>
+                        <td data-label="Kategori"><span className="badge badge-category">{item.categories?.name}</span></td>
+                        <td data-label="Stok"><span className="badge badge-warning">{item.stock_quantity} tersisa</span></td>
                       </tr>
                     ))}
                 </tbody>

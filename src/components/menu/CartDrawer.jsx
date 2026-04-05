@@ -73,7 +73,7 @@ export default function CartDrawer({ cart, totalItems, totalPrice, onAdd, onRemo
               <span className="cart-total-price">{formatPrice(totalPrice)}</span>
             </div>
             <a
-              href={`https://wa.me/6282184734885?text=${buildWhatsAppMessage()}`}
+              href={`https://wa.me/62895803541199?text=${encodeURIComponent('Halo Kedai Senyum, saya mau pesan:\n\n' + decodeURIComponent(buildWhatsAppMessage()))}`}
               target="_blank"
               rel="noopener noreferrer"
               className="cart-wa-btn"

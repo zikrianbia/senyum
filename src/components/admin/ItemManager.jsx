@@ -133,11 +133,11 @@ export default function ItemManager() {
                         </div>
                       </div>
                     </td>
-                    <td>
+                    <td data-label="Kategori">
                       <span className="badge badge-category">{item.categories?.name || '—'}</span>
                     </td>
-                    <td style={{ fontWeight: 600 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <td data-label="Harga" style={{ fontWeight: 600 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-end' }}>
                         Rp {Number(item.price).toLocaleString('id-ID')}
                         <button
                           className="btn btn-ghost btn-icon"
@@ -149,8 +149,8 @@ export default function ItemManager() {
                         </button>
                       </div>
                     </td>
-                    <td>
-                      <div className="stock-control">
+                    <td data-label="Stok">
+                      <div className="stock-control" style={{ justifyContent: 'flex-end' }}>
                         <button onClick={() => handleAdjust(item.id, -1)} title="Kurangi">
                           <Minus size={14} />
                         </button>
@@ -162,7 +162,7 @@ export default function ItemManager() {
                         </button>
                       </div>
                     </td>
-                    <td>
+                    <td data-label="Status">
                       <label className="toggle">
                         <input
                           type="checkbox"
@@ -172,7 +172,7 @@ export default function ItemManager() {
                         <span className="toggle-slider"></span>
                       </label>
                     </td>
-                    <td>
+                    <td data-label="Opsi">
                       <div className="actions-cell">
                         <button className="btn btn-ghost btn-icon" onClick={() => openEdit(item)} title="Ubah">
                           <Pencil size={16} />
