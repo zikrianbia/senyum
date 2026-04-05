@@ -216,9 +216,11 @@ body {
 /* ================ MAIN CONTENT ================ */
 .main-content {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
 }
 
@@ -1763,15 +1765,21 @@ body {
 }
 
 @media (max-width: 1024px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
   .sidebar {
     position: fixed !important;
-    left: -100% !important;
+    left: -280px !important;
     top: 0;
     bottom: 0;
     width: 280px;
-    z-index: 100; /* Higher priority */
+    z-index: 100;
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex !important;
+    flex-direction: column !important;
+    flex-shrink: 0 !important;
   }
 
   .sidebar.open {
@@ -1781,23 +1789,30 @@ body {
   .main-content {
     margin-left: 0 !important;
     width: 100% !important;
+    min-width: 0 !important;
     overflow-x: hidden;
+    flex: 1;
   }
 
-
   .mobile-header {
-    display: flex;
+    display: flex !important;
   }
 
   .sidebar-close-btn {
+    display: flex !important;
+  }
+
+  .sidebar-header {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .content-header {
-    padding: 20px;
+    padding: 16px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
   }
 
   .content-header h2 {
@@ -1805,7 +1820,7 @@ body {
   }
 
   .content-body {
-    padding: 16px;
+    padding: 12px;
   }
 
   .stats-grid {
@@ -1815,6 +1830,11 @@ body {
   .btn-primary {
     width: 100%;
     justify-content: center;
+  }
+
+  .data-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
