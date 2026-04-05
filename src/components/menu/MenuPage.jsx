@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
-import { Search } from 'lucide-react'
+import { Search, ShoppingCart, Plus, Minus } from 'lucide-react'
+import { useCart } from '../../hooks/useCart'
+import CartDrawer from './CartDrawer'
 
 export default function MenuPage() {
   const [categories, setCategories] = useState([])
@@ -8,6 +10,12 @@ export default function MenuPage() {
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState(null)
   const [search, setSearch] = useState('')
+  const [cartOpen, setCartOpen] = useState(false)
+
+  const {
+    cart, addToCart, removeFromCart, clearCart,
+    getItemQty, totalItems, totalPrice,
+  } = useCart()
 
   useEffect(() => {
     async function fetchData() {
@@ -108,28 +116,63 @@ export default function MenuPage() {
                 <span className="section-count">{cat.items.length}</span>
               </div>
               <div className="menu-items-grid">
-                {cat.items.map(item => (
-                  <div
-                    key={item.id}
-                    className={`menu-item-card ${item.stock_quantity === 0 ? 'unavailable' : ''}`}
-                  >
-                    <div className="item-image">
-                      {cat.icon}
-                    </div>
-                    <div className="item-details">
-                      <div className="item-name">{item.name}</div>
-                      {item.description && (
-                        <div className="item-desc">{item.description}</div>
+                {cat.items.map(item => {
+                  const qty = getItemQty(item.id)
+                  const outOfStock = item.stock_quantity === 0
+
+                  return (
+                    <div
+                      key={item.id}
+                      className={`menu-item-card ${outOfStock ? 'unavailable' : ''}`}
+                    >
+                      <div className="item-image">
+                        {cat.icon}
+                      </div>
+                      <div className="item-details">
+                        <div className="item-name">{item.name}</div>
+                        {item.description && (
+                          <div className="item-desc">{item.description}</div>
+                        )}
+                        {outOfStock && (
+                          <div className="unavailable-badge">Stok habis</div>
+                        )}
+                      </div>
+                      <div className="item-price">
+                        Rp {Number(item.price).toLocaleString('id-ID')}
+                      </div>
+
+                      {/* Cart Controls */}
+                      {!outOfStock && (
+                        <div className="item-cart-controls">
+                          {qty > 0 ? (
+                            <div className="item-qty-group">
+                              <button
+                                className="item-qty-btn minus"
+                                onClick={() => removeFromCart(item.id)}
+                              >
+                                <Minus size={14} />
+                              </button>
+                              <span className="item-qty-count">{qty}</span>
+                              <button
+                                className="item-qty-btn plus"
+                                onClick={() => addToCart(item)}
+                              >
+                                <Plus size={14} />
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              className="item-add-btn"
+                              onClick={() => addToCart(item)}
+                            >
+                              <Plus size={16} />
+                            </button>
+                          )}
+                        </div>
                       )}
-                      {item.stock_quantity === 0 && (
-                        <div className="unavailable-badge">Stok habis</div>
-                      )}
                     </div>
-                    <div className="item-price">
-                      Rp {Number(item.price).toLocaleString('id-ID')}
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           ))
@@ -139,6 +182,30 @@ export default function MenuPage() {
       <div className="menu-footer">
         Dibuat oleh <span>Kedai Senyum</span> · Diperbarui secara langsung
       </div>
+
+      {/* Floating Cart Button */}
+      {totalItems > 0 && (
+        <button className="floating-cart-btn" onClick={() => setCartOpen(true)}>
+          <ShoppingCart size={22} />
+          <span className="floating-cart-badge">{totalItems}</span>
+          <div className="floating-cart-info">
+            <span className="floating-cart-label">{totalItems} item</span>
+            <span className="floating-cart-price">Rp {totalPrice.toLocaleString('id-ID')}</span>
+          </div>
+        </button>
+      )}
+
+      {/* Cart Drawer */}
+      <CartDrawer
+        cart={cart}
+        totalItems={totalItems}
+        totalPrice={totalPrice}
+        onAdd={addToCart}
+        onRemove={removeFromCart}
+        onClear={clearCart}
+        isOpen={cartOpen}
+        onClose={() => setCartOpen(false)}
+      />
     </div>
   )
 }
